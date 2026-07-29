@@ -28,7 +28,7 @@ async def load_extensions():
 
 async def main():
     async with bot:
-        await bot.load_extension("cogs.welcome")
+        await load_extensions()
         await bot.start(TOKEN)
 
 if __name__ == '__main__':
