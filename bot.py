@@ -1,6 +1,7 @@
 import os
-
+import asyncio
 import discord
+from discord.ext import commands
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -9,8 +10,24 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 intents = discord.Intents.default()
 client = discord.Client(intents=intents)
 
-@client.event
+# ! elotag figyelese
+bot = commands.Bot(command_prefix='!', intents=intents) 
+
+@bot.event
 async def on_ready():
     print(f'{client.user} has connected to Discord!')
 
-client.run(TOKEN)
+# Modulok betoltese
+async def load_extensions():
+    for filename in os.listdir('./cogs'):
+        if filename.endswith('.py'):
+            await bot.load_extension(f'cogs.{filename[:-3]}')
+
+
+async def main():
+    async with bot:
+        await load_extensions()
+        await bot.start(TOKEN)
+
+if __name__ == '__main__':
+    asyncio.run(main())
