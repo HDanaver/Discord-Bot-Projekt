@@ -11,7 +11,9 @@ YTDL_OPTIONS = {
     'noplaylist': True,
     'quiet': True,
     'default_search': 'auto',
-    'source_address': '0.0.0.0'
+    'source_address': '0.0.0.0',
+    'socket_timeout': 15,          # Megemelt időkeret a kapcsolódásra (másodpercben)
+    'retries': 5,                   # Újrapróbálkozások száma hiba esetén
 }
 
 # FFmpeg beallitas (ne akadjon meg a zene, ha a stream megszakad)
@@ -47,9 +49,12 @@ class Music(commands.Cog):
                 ctx.send(f'🎶Most szól: **{title}**'),
                 self.bot.loop
             )
-        else:
-        # Ha kiurult a sor nem csinal semmit
-         pass
+    #    Ellenorzo fuggveny a csatorna nevehez
+    async def cog_before_invoke(self, ctx):
+        # Ez a fuggveny minden parancs elott lefut
+        if ctx.channel.name != 'zene':
+            await ctx.send("❌ A zene parancsokat csak a #zene csatornában lehet használni.")
+            raise commands.CheckFailure("A parancsot nem a megfelelő csatornában hívták meg.")
 
 # Youtube zene lejaszasa URL-bol vagy cim alapjan
     @commands.command(name='play', help='Zene lejátszása YouTube URL-ből')
