@@ -8,6 +8,8 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
 intents = discord.Intents.default()
+intents.message_content = True
+intents.members = True
 client = discord.Client(intents=intents)
 
 # ! elotag figyelese
@@ -15,7 +17,7 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 
 @bot.event
 async def on_ready():
-    print(f'{client.user} has connected to Discord!')
+    print(f'{bot.user.name} has connected to Discord!')
 
 # Modulok betoltese
 async def load_extensions():
@@ -26,7 +28,7 @@ async def load_extensions():
 
 async def main():
     async with bot:
-        await load_extensions()
+        await bot.load_extension("cogs.welcome")
         await bot.start(TOKEN)
 
 if __name__ == '__main__':
