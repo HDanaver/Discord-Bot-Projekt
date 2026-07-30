@@ -12,9 +12,9 @@ YTDL_OPTIONS = {
     'quiet': True,
     'default_search': 'auto',
     'source_address': '0.0.0.0',
-    'socket_timeout': 15,          # Megemelt időkeret a kapcsolódásra (másodpercben)
+    'socket_timeout': 15,
     'retries': 5,
-     'js_runtimes': ['nodejs'],                   # Újrapróbálkozások száma hiba esetén
+    'js_runtimes': {'node': {}},  # <-- Így a helyes formátum!
 }
 
 # FFmpeg beallitas (ne akadjon meg a zene, ha a stream megszakad)
