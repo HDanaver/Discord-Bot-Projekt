@@ -14,7 +14,7 @@ YTDL_OPTIONS = {
     'source_address': '0.0.0.0',
     'socket_timeout': 15,
     'retries': 5,
-    'js_runtimes': {'node': {}},  # <-- Így a helyes formátum!
+    'js_runtimes': {'node': {'path': '/usr/bin/node'}},
 }
 
 # FFmpeg beallitas (ne akadjon meg a zene, ha a stream megszakad)
