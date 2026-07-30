@@ -13,7 +13,8 @@ YTDL_OPTIONS = {
     'default_search': 'auto',
     'source_address': '0.0.0.0',
     'socket_timeout': 15,          # Megemelt időkeret a kapcsolódásra (másodpercben)
-    'retries': 5,                   # Újrapróbálkozások száma hiba esetén
+    'retries': 5,
+     'js_runtimes': ['nodejs'],                   # Újrapróbálkozások száma hiba esetén
 }
 
 # FFmpeg beallitas (ne akadjon meg a zene, ha a stream megszakad)
@@ -259,6 +260,21 @@ class Music(commands.Cog):
             message += "📋 *Nincs több zene a sorban.*"
 
         await ctx.send(message)
+
+# Help parancs a zene parancsokhoz
+    @commands.command(name='help', help='Megmutatja a zene parancsok használatát')
+    async def help(self, ctx):
+        help_message = """
+        🎵 **Zene parancsok:**
+        `!play <cím vagy URL>` - Zene lejátszása YouTube/SoundCloud URL-ből vagy keresés alapjan
+        `!skip` - Következő zene lejátszása
+        `!pause` - Megállítja a jelenleg lejátszott zenét
+        `!resume` - Folytatja a megállított zenét
+        `!stop` - Leállítja a jelenleg lejátszott zenét és törli a sort
+        `!loop` - Ki/bekapcsolja az éppen szóló dal ismétlését
+        `!queue` vagy `!q` - Megmutatja a lejátszási sort
+        """
+        await ctx.send(help_message)
 
 # Kötelező belépési pont a Cog számára
 async def setup(bot):
