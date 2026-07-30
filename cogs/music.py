@@ -38,7 +38,7 @@ class Music(commands.Cog):
 
     # Automatikusan kilep ha nincs zene a sorban
     async def auto_disconnect(self, ctx):
-        await asyncio.sleep(60)  # Várakozás 60 másodpercig
+        await asyncio.sleep(20)  # Várakozás 60 másodpercig
        # Újra ellenőrizzük, hogy a bot bent van-e és hogy épp NEM játszik és NEM szünetel
         if ctx.voice_client and not ctx.voice_client.is_playing() and not ctx.voice_client.is_paused():
             await ctx.voice_client.disconnect()
@@ -47,10 +47,12 @@ class Music(commands.Cog):
     def play_next(self, ctx):
         guild_id = ctx.guild.id
         queue = self.get_queue(guild_id)
+        is_looped = False
 
         # Ha be van kapcsolva a loop ÉS van éppen szóló dal, újra azt játsszuk le
         if self.loop.get(guild_id, False) and hasattr(self, 'current_song') and self.current_song.get(guild_id):
             next_song = self.current_song[guild_id]
+            is_looped = True
         
         # Egyébként kivesszük a következő zenét a sorból (ha van)
         elif len(queue) > 0:
@@ -75,10 +77,11 @@ class Music(commands.Cog):
         source = discord.FFmpegPCMAudio(song_url, **FFMPEG_OPTIONS)
         ctx.voice_client.play(source, after=lambda e: self.play_next(ctx))
 
-        asyncio.run_coroutine_threadsafe(
-            ctx.send(f'🎶 Most szól: **{title}**'),
-            self.bot.loop
-        )
+        if not is_looped:
+            asyncio.run_coroutine_threadsafe(
+                ctx.send(f'🎶 Most szól: **{title}**'),
+                self.bot.loop
+            )
 
     #    Ellenorzo fuggveny a csatorna nevehez
     async def cog_before_invoke(self, ctx):
